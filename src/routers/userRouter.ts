@@ -1,5 +1,6 @@
 import { Router, type Request, type Response } from "express"
-import data from "../data"
+import pool from "../db/dbAuth"
+import queries from "../db/queries"
 
 const userRouter = Router()
 
@@ -8,42 +9,46 @@ userRouter.options("*", async (_: Request, res: Response) => {
 })
 
 userRouter.get("/users/:id", async (req: Request, res: Response) => {
-  const user = data.find((el) => el.id === +req.params.id)
+  const user = await pool.query(queries.GET_USER_QUERY, [req.params.id])
   if (!user) {
     res.status(404).send()
     return
   }
-  res.json(user)
+  res.json(user.rows[0])
 })
 
 userRouter.get("/users", async (_: Request, res: Response) => {
-  res.json(data)
+  const users = await pool.query(queries.GET_USERS_QUERY)
+  res.json(users.rows)
 })
 
 userRouter.post("/users", async (req: Request, res: Response) => {
-  data.push(req.body)
-  res.json(data)
+  const { name, username, email } = req.body
+  await pool.query(queries.SET_USER_QUERY, [name, username, email])
+  res.status(201).send()
 })
 
 userRouter.delete("/users/:id", async (req: Request, res: Response) => {
-  const userIndex = data.findIndex((el) => el.id === +req.params.id)
-  data.splice(userIndex, 1)
-  res.json(data)
+  await pool.query(queries.DELETE_USER_QUERY, [req.params.id])
+  res.status(200).send()
 })
 
 userRouter.patch("/users/:id", async (req: Request, res: Response) => {
-  const userIndex = data.findIndex((el) => el.id === +req.params.id)
-  let user = data.splice(userIndex, 1)[0]
-  user = { ...user, ...req.body }
-  data.push(user)
-  res.json(user)
+  const user = await pool.query(queries.GET_USER_QUERY, [req.params.id])
+  if (!user) {
+    res.status(404).send()
+    return
+  }
+  const updatedUser = { ...user.rows[0], ...req.body }
+  const { id, name, username, email } = updatedUser
+  await pool.query(queries.EDIT_USER_QUERY, [id, name, username, email])
+  res.status(200).send()
 })
 
 userRouter.put("/users/:id", async (req: Request, res: Response) => {
-  const userIndex = data.findIndex((el) => el.id === +req.params.id)
-  data.splice(userIndex, 1)
-  data.push(req.body)
-  res.json(data)
+  const { name, username, email } = req.body
+  await pool.query(queries.EDIT_USER_QUERY, [req.params.id, name, username, email])
+  res.status(200).send()
 })
 
 export default userRouter

@@ -1,11 +1,14 @@
+import { configDotenv } from "dotenv"
 import pg from "pg"
 
+configDotenv()
+
 const pool = new pg.Pool({
-  user: "postgres",
-  password: "root",
-  host: "postgres",
-  port: 5432,
-  database: "db_b_e_course",
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  host: process.env.POSTGRES_HOST,
+  port: Number(process.env.POSTGRES_PORT),
+  database: process.env.POSTGRES_DB,
 })
 
 export default pool

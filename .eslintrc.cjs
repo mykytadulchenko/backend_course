@@ -25,5 +25,9 @@ module.exports = {
     "prettier/prettier": ["error"],
     "import/no-unresolved": 0,
     "import/extensions": 0,
+    "no-unused-vars": 0,
+    "@typescript-eslint/no-unused-vars": 0,
+    "no-shadow": 0,
+    "@typescript-eslint/no-shadow": 0,
   },
 }

@@ -1,8 +1,8 @@
-import express from "express"
 import { configDotenv } from "dotenv"
-import userRouter from "./routers/userRouter"
+import express from "express"
 import corsHandler from "./middleware/cors"
 import orderRouter from "./routers/orderRouter"
+import userRouter from "./routers/userRouter"
 import errHandler from "./utils/serverErrHandler"
 
 configDotenv()

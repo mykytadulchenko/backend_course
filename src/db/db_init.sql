@@ -1,4 +1,4 @@
--- CREATE DATABASE db_b_e_course;
+-- CREATE DATABASE backend_course;
 
 -- \connect db_b_e_course;
 
@@ -15,7 +15,7 @@ CREATE TABLE users (
 CREATE TABLE orders (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   total DECIMAL(6, 2),
-  date DATE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id UUID,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -51,19 +51,30 @@ INSERT INTO products (title, price) VALUES
   ('Smartwatch', 200.00);
 
 -- this sub-queries below are used just for receiving pre-generated data from other tables and filling test data into related tables 
-INSERT INTO orders (total, date, user_id) VALUES
-  (1050.50, '2024-05-11', (SELECT id FROM users WHERE username = 'Bret74')),
-  (550.75, '2024-05-10', (SELECT id FROM users WHERE username = 'Karianne_2')),
-  (200.00, '2024-05-09', (SELECT id FROM users WHERE username = 'Kamren777')),
-  (500.75, '2024-05-08', (SELECT id FROM users WHERE username = 'Samantha82')),
-  (300.00, '2024-05-07', (SELECT id FROM users WHERE username = 'Bret74'));
+INSERT INTO orders (total, user_id) VALUES
+  (1050.50, (SELECT id FROM users WHERE username = 'Bret74')),
+  (550.75, (SELECT id FROM users WHERE username = 'Karianne_2')),
+  (200.00, (SELECT id FROM users WHERE username = 'Kamren777')),
+  (500.75, (SELECT id FROM users WHERE username = 'Samantha82'));
 
 INSERT INTO order_details (order_id, product_id, qty) VALUES
-  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Bret74') AND date = '2024-05-11'), (SELECT id FROM products WHERE title = 'Laptop'), 1),
-  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Bret74') AND date = '2024-05-11'), (SELECT id FROM products WHERE title = 'Headphones'), 1),
-  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Karianne_2') AND date = '2024-05-10'), (SELECT id FROM products WHERE title = 'Phone'), 1),
-  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Karianne_2') AND date = '2024-05-10'), (SELECT id FROM products WHERE title = 'Headphones'), 1),
-  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Kamren777') AND date = '2024-05-09'), (SELECT id FROM products WHERE title = 'Smartwatch'), 1),
-  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Samantha82') AND date = '2024-05-08'), (SELECT id FROM products WHERE title = 'Phone'), 1),
-  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Bret74') AND date = '2024-05-07'), (SELECT id FROM products WHERE title = 'Tablet'), 1);
+  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Bret74')), (SELECT id FROM products WHERE title = 'Laptop'), 1),
+  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Bret74')), (SELECT id FROM products WHERE title = 'Headphones'), 1),
+  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Karianne_2')), (SELECT id FROM products WHERE title = 'Phone'), 1),
+  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Karianne_2')), (SELECT id FROM products WHERE title = 'Headphones'), 1),
+  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Kamren777')), (SELECT id FROM products WHERE title = 'Smartwatch'), 1),
+  ((SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'Samantha82')), (SELECT id FROM products WHERE title = 'Phone'), 1);
 
+
+
+-- List of used queries
+
+-- GET_USERS_QUERY: "SELECT * FROM users"
+-- GET_USER_QUERY: "SELECT * FROM users WHERE id = $1"
+-- GET_USER_ORDERS: "SELECT * FROM orders WHERE user_id = $1 ORDER BY date DESC LIMIT $2 OFFSET $3"
+-- GET_ORDER_PRODUCT_QTY_COUNT:
+--   "SELECT id, COUNT(order_details.product_id) as product_qty FROM orders LEFT JOIN order_details ON id = order_details.order_id WHERE id = $1 GROUP BY id "
+-- GET_PRODUCTS: "SELECT * FROM products WHERE LOWER(title) LIKE $1"
+-- SET_USER_QUERY: "INSERT INTO USERS (name, username, email) values($1, $2, $3)"
+-- EDIT_USER_QUERY: "UPDATE users SET name = $2, username = $3, email = $4 WHERE id = $1"
+-- DELETE_USER_QUERY: "DELETE FROM users WHERE id = $1"

@@ -1,5 +1,6 @@
 import { configDotenv } from "dotenv"
 import { DataSource } from "typeorm"
+import seedData from "./seeds"
 
 configDotenv()
 
@@ -10,15 +11,11 @@ const pgDataSource = new DataSource({
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
-  synchronize: false,
+  synchronize: true, // should be false in real projects
   logging: true,
   entities: ["./src/db/typeorm/entities/*.ts"],
-  migrations: [],
+  migrationsTableName: "migrations",
+  migrations: ["./src/db/typeorm/migrations/*.ts"],
 })
 
-const initializeDatabase = async () => {
-  if (!pgDataSource.isInitialized) await pgDataSource.initialize()
-  return pgDataSource
-}
-
-export default initializeDatabase
+export default pgDataSource

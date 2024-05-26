@@ -22,6 +22,8 @@ export default class Order {
   @CreateDateColumn({ type: "timestamp" })
   created_at: Date
 
+  @Column("uuid")
+  user_id: string
   //   @UpdateDateColumn({ type: "timestamp" })
   //   updated_at: Date
 

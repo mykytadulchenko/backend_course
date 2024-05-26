@@ -1,11 +1,10 @@
-import initializeDatabase from "../db/typeorm/dataSource"
+import pgDataSource from "../db/typeorm/dataSource"
 import Order from "../db/typeorm/entities/Order"
 import Product from "../db/typeorm/entities/Product"
 
 class OrderService {
   getOrdersByUserId = async (userId: string, limit: number, offset: number) => {
-    const dataSource = await initializeDatabase()
-    const orders = await dataSource
+    const orders = await pgDataSource
       .getRepository(Order)
       .createQueryBuilder("orders")
       .where("orders.user_id = :id", { id: userId })
@@ -17,8 +16,7 @@ class OrderService {
   }
 
   getOrderProductQty = async (orderId: string) => {
-    const dataSource = await initializeDatabase()
-    const qty = await dataSource
+    const qty = await pgDataSource
       .getRepository(Order)
       .createQueryBuilder("orders")
       .leftJoin("orders.order_details", "order_details")
@@ -32,8 +30,7 @@ class OrderService {
   }
 
   searchProductsByTitle = async (searchStr: string) => {
-    const dataSource = await initializeDatabase()
-    const searchResults = dataSource
+    const searchResults = pgDataSource
       .getRepository(Product)
       .createQueryBuilder("products")
       .where("LOWER(products.title) LIKE :search", { search: searchStr })

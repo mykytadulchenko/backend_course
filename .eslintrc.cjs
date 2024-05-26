@@ -35,6 +35,9 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": 0,
     "no-shadow": 0,
     "@typescript-eslint/no-shadow": 0,
+    camelcase: 0,
+    "@typescript-eslint/camelcase": 0,
+    "import/prefer-default-export": 0,
     "class-methods-use-this": 0,
   },
 }

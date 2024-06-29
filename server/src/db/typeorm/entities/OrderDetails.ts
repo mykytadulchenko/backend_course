@@ -13,7 +13,9 @@ export default class OrderDetails {
   @Column("int")
   qty: number
 
-  @ManyToOne(() => Order, (order) => order.order_details)
+  @ManyToOne(() => Order, (order) => order.order_details, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "order_id" })
   order: Order
 

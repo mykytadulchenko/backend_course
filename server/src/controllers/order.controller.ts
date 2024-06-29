@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express"
-import ERROR from "../types/errors"
+import { NextFunction, Response } from "express"
 import orderService from "../services/order.service"
+import ERROR from "../types/errors"
 import { IRequest } from "../types/request"
 
 class OrderController {
@@ -10,8 +10,8 @@ class OrderController {
         res.status(400).send(ERROR.BAD_REQUEST)
         return
       }
-      const { limit = null, page = 1 } = req.query as { limit: string | null; page: string }
-      const data = await orderService.getOrdersByUserId(req.params.userId, Number(limit), Number(limit) * (+page - 1))
+      const { limit = 0, page = 1 } = req.query
+      const data = await orderService.getOrdersByUserId(req.params.userId, +limit, +limit * (+page - 1))
       res.json(data)
     } catch (err) {
       next(err)

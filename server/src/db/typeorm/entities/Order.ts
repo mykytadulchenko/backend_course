@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import User from "./User"
 import OrderDetails from "./OrderDetails"
+import User from "./User"
 
 @Entity("orders")
 export default class Order {
@@ -24,10 +24,13 @@ export default class Order {
 
   @Column("uuid")
   user_id: string
-  //   @UpdateDateColumn({ type: "timestamp" })
-  //   updated_at: Date
 
-  @ManyToOne(() => User, (user) => user.order)
+  @UpdateDateColumn({ type: "timestamp" })
+  updated_at: Date
+
+  @ManyToOne(() => User, (user) => user.order, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "user_id" })
   user: User
 

@@ -15,6 +15,9 @@ export default class User {
   @Column({ type: "varchar", length: 32 })
   email: string
 
+  @Column({ type: "varchar", length: 16 })
+  password: string
+
   @OneToMany(() => Order, (order) => order.user)
   order: Order[]
 }

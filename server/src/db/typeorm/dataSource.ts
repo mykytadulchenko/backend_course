@@ -1,8 +1,8 @@
 import { configDotenv } from "dotenv"
+import path from "path"
 import { DataSource } from "typeorm"
-import seedData from "./seeds"
 
-configDotenv()
+configDotenv({ path: path.resolve(__dirname, "../../../../.env") })
 
 const pgDataSource = new DataSource({
   type: "postgres",
@@ -11,11 +11,13 @@ const pgDataSource = new DataSource({
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
-  synchronize: true, // should be false in real projects
+  synchronize: false,
   logging: true,
-  entities: ["./src/db/typeorm/entities/*.ts"],
+  entities: [path.resolve(__dirname, "entities/*.ts")],
   migrationsTableName: "migrations",
-  migrations: ["./src/db/typeorm/migrations/*.ts"],
+  migrations: [path.resolve(__dirname, "migrations/*.ts")],
+  installExtensions: true,
+  uuidExtension: "uuid-ossp",
 })
 
 export default pgDataSource

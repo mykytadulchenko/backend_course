@@ -1,8 +1,9 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express"
+import logger from "../logger"
 import ERROR from "../types/errors"
 
-const errHandler = (err: ErrorRequestHandler, req: Request, res: Response, _: NextFunction) => {
-  console.log(err)
+const errHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
+  logger.error(err.stack)
   res.status(500).send(ERROR.SERVER_ERROR)
 }
 

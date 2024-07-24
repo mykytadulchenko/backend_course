@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
 import { IOrder, IOrderDetail, IProduct, IUser } from "../../../types/entities"
+import { hashPassword } from "../../../utils/passwordHandler"
 import Order from "../entities/Order"
 import OrderDetails from "../entities/OrderDetails"
 import Product from "../entities/Product"
@@ -8,18 +9,19 @@ import User from "../entities/User"
 export class HydrateDatabase1719676171422 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const orderDrafts = [{ total: 1050.5 }, { total: 550.75 }, { total: 200.0 }, { total: 500.75 }]
+    const password = await hashPassword("12345Great!")
 
     const users: Array<IUser> = (
       await queryRunner.manager.getRepository(User).insert([
-        { name: "Leanne Graham", username: "Bret74", email: "Sincere@april.biz", password: "12345Great!" },
+        { name: "Leanne Graham", username: "Bret74", email: "Sincere@april.biz", password },
         {
           name: "Patricia Lebsack",
           username: "Karianne_2",
           email: "Julianne.OConner@kory.org",
-          password: "12345Great!",
+          password,
         },
-        { name: "Chelsey Dietrich", username: "Kamren777", email: "Lucio_Hettinger@annie.ca", password: "12345Great!" },
-        { name: "Clementine Bauch", username: "Samantha82", email: "Nathan@yesenia.net", password: "12345Great!" },
+        { name: "Chelsey Dietrich", username: "Kamren777", email: "Lucio_Hettinger@annie.ca", password },
+        { name: "Clementine Bauch", username: "Samantha82", email: "Nathan@yesenia.net", password },
       ])
     ).raw
 

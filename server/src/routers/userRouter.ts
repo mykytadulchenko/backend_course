@@ -3,16 +3,14 @@ import userController from "../controllers/user.controller"
 
 const userRouter = Router()
 
-userRouter.get("/users/:id", userController.getUserById)
+userRouter.get("/:id", userController.getUserById)
 
-userRouter.get("/users", userController.getAllUsers)
+userRouter.get("/", userController.getAllUsers)
 
-userRouter.post("/users", userController.createUser)
+userRouter.delete("/:id", userController.removeUser)
 
-userRouter.delete("/users/:id", userController.removeUser)
+userRouter.patch("/:id", userController.partiallyUpdateUser)
 
-userRouter.patch("/users/:id", userController.partiallyUpdateUser)
-
-userRouter.put("/users/:id", userController.fullyUpdateUser)
+userRouter.put("/:id", userController.fullyUpdateUser)
 
 export default userRouter

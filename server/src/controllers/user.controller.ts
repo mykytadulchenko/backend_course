@@ -28,21 +28,6 @@ class UserController {
     }
   }
 
-  createUser = async (req: IRequest<Omit<IUser, "id">>, res: Response, next: NextFunction) => {
-    try {
-      const { name, username, email, password } = req.body
-      if (!name || !username || !email || !password) {
-        res.status(400).send(ERROR.BAD_REQUEST)
-        return
-      }
-      const hashedPassword = await hashPassword(password)
-      await userService.createUser({ ...req.body, password: hashedPassword })
-      res.status(201).send()
-    } catch (err) {
-      next(err)
-    }
-  }
-
   removeUser = async (req: IRequest, res: Response, next: NextFunction) => {
     try {
       if (!req.params.id) {

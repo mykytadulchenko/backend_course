@@ -8,6 +8,11 @@ class UserService {
     return user
   }
 
+  getUserByUsername = async (username: IUser["username"]) => {
+    const user = await pgDataSource.getRepository(User).findOneBy({ username })
+    return user
+  }
+
   getAllUsers = async () => {
     const users = await pgDataSource.getRepository(User).find()
     return users

@@ -7,7 +7,8 @@ export class InitializeDatabase1719676136993 implements MigrationInterface {
             id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
             name VARCHAR(32),
             username VARCHAR(16),
-            email VARCHAR(32)
+            email VARCHAR(32),
+            password VARCHAR(255)
         );
     `)
 

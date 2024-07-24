@@ -1,4 +1,4 @@
-import { Request, RequestHandler, request } from "express"
+import { Request } from "express"
 import * as core from "express-serve-static-core"
 
 interface Params extends core.ParamsDictionary {

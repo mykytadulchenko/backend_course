@@ -13,7 +13,8 @@
     "format": "prettier --write ./server/src/**/*.ts",
     "migration:create": "yarn --cwd server migration:create",
     "migration:run": "yarn --cwd server migration:run",
-    "migration:revert": "yarn --cwd server migration:revert"
+    "migration:revert": "yarn --cwd server migration:revert",
+    "test": "yarn --cwd server test"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

@@ -1,6 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
-import Order from "./Order"
+import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import Chat from "./Chat"
 import JWT from "./JWT"
+import Message from "./Message"
+import Order from "./Order"
 
 @Entity("users")
 export default class User {
@@ -24,4 +26,16 @@ export default class User {
 
   @OneToMany(() => JWT, (jwt) => jwt.user)
   jwt: JWT[]
+
+  @ManyToMany(() => Chat, (chat) => chat.first_participant)
+  first_chat: Chat[]
+
+  @ManyToMany(() => Chat, (chat) => chat.second_participant)
+  second_chat: Chat[]
+
+  @OneToMany(() => Message, (message) => message.sender)
+  sendMessage: Message[]
+
+  @OneToMany(() => Message, (message) => message.receiver)
+  receiveMessage: Message[]
 }

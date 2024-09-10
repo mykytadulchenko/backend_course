@@ -8,8 +8,9 @@ module.exports = {
     {
       env: {
         node: true,
+        jest: true,
       },
-      files: [".eslintrc.{js,cjs}"],
+      files: [".eslintrc.{js,cjs}", "**/*.test.{js,ts}"],
       parserOptions: {
         sourceType: "script",
       },
@@ -39,6 +40,6 @@ module.exports = {
     "@typescript-eslint/camelcase": 0,
     "import/prefer-default-export": 0,
     "class-methods-use-this": 0,
-    "@typescript-eslint/no-explicit-any": 0
+    "@typescript-eslint/no-explicit-any": 0,
   },
 }
